@@ -1,0 +1,40 @@
+.board-container {
+	height: 360px;
+	width: 360px;
+	border: 2px dashed blue;
+}
+
+.board-container .row {
+	height: 100%;
+}
+
+.board-square {
+	border: 2px solid #F7F7F7;
+	height: 25%;
+	padding: 0;
+	overflow: hidden;
+}
+
+.flipped .face-container {
+	top: -100%;
+}
+
+.face-container {
+	height: 200%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	transition: 400ms;
+}
+
+.face-down, .face-up {
+	height: 50%;
+}
+
+.face-down {
+	background-color: #D0D0D0;
+}
+
+.face-up {
+	background-color: coral;
+}
