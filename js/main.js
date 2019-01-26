@@ -4,12 +4,39 @@ class BoardSquare {
 		this.setColor(color);
 		this.isFaceUp = false;
 		this.isMatched = false;
+		this.element.addEventListener("click", this, false);
 	}
 
 	setColor(color) {
 		const faceUpElement = this.element.getElementsByClassName("face-up")[0];
 		this.color = color;
 		faceUpElement.classList.add(color);
+	}
+
+	handleEvent(event) {
+		switch(event.type) {
+			case "click":
+			console.log(this.color + " square was clicked");
+			if (this.isFaceUp || this.isMatched) {
+				return;
+			}
+			else {
+				this.isFaceUp = true;
+				this.element.classList.add('flipped');
+				flipSquare(this);
+			}
+		}
+	}
+
+	reset() {
+		this.isFaceUp = false;
+		this.isMatched = false;
+		this.element.classList.remove("flipped");
+	}
+
+	matchFound() {
+		this.isFaceUp = true;
+		this.isMatched = true;
 	}
 }
 
@@ -45,7 +72,7 @@ function generateColorPairs() {
 	}
 }
 
-// randomly shuffle the array
+// randomly shuffle the array using Fisher–Yates Shuffle
 function shuffleArray(array) {
 	var currentIndex = array.length;
 	var tempValue, randomIndex;
@@ -83,6 +110,31 @@ function gameSetup() {
 		const color = randomColorPairs[i];
 		const square = new BoardSquare(element, color);
 		boardSquares.push(square);
+	}
+}
+
+// flip the square
+var firstFaceUpSquare = null;
+
+function flipSquare(square) {
+	if (firstFaceUpSquare == null) {
+		firstFaceUpSquare = square;
+		return;
+	}
+
+	if (firstFaceUpSquare.color === square.color) {
+		firstFaceUpSquare.matchFound();
+		square.matchFound();
+		firstFaceUpSquare = null;
+	}
+	else {
+		const a = firstFaceUpSquare;
+		const b = square;
+		firstFaceUpSquare = null;
+		setTimeout(function() {
+			a.reset();
+			b.reset();
+		}, 400);
 	}
 }
 
