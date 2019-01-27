@@ -81,9 +81,12 @@ class StopWatch {
 	}
 
 	formatTime(time) {
-		const seconds = Math.floor(time / 1000) % 60;
-		const minutes = Math.floor(time / 60000) % 60;
-		const hours = Math.floor(time / 3600000) % 60;
+		var seconds = Math.floor(time / 1000) % 60;
+		if (seconds < 10) seconds = "0" + seconds;
+		var minutes = Math.floor(time / 60000) % 60;
+		if (minutes < 10) minutes = "0" + minutes;
+		var hours = Math.floor(time / 3600000) % 60;
+		if (hours < 10) hours = "0" + hours;
 		return `Time: ${hours}:${minutes}:${seconds}`;
 	}
 }
