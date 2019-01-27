@@ -9,6 +9,8 @@ class BoardSquare {
 
 	setColor(color) {
 		const faceUpElement = this.element.getElementsByClassName("face-up")[0];
+		// remove the color if it exists
+		faceUpElement.classList.remove(this.color);
 		this.color = color;
 		faceUpElement.classList.add(color);
 	}
@@ -97,22 +99,6 @@ function shuffleColors() {
 	return shuffleArray(colorPairs);
 }
 
-// set up the game
-const boardSquares = [];
-
-function gameSetup() {
-	generateBoardSquares();
-	const randomColorPairs = shuffleColors();
-	const squareElements = document.getElementsByClassName("board-square");
-
-	for (var i = 0; i < squareElements.length; i++) {
-		const element = squareElements[i];
-		const color = randomColorPairs[i];
-		const square = new BoardSquare(element, color);
-		boardSquares.push(square);
-	}
-}
-
 // flip the square
 var firstFaceUpSquare = null;
 
@@ -135,6 +121,51 @@ function flipSquare(square) {
 			a.reset();
 			b.reset();
 		}, 400);
+	}
+}
+
+// reset the game state
+function resetGame() {
+	// reset the first face up square if not null
+	firstFaceUpSquare = null;
+
+	// reset state for each sqaure
+	boardSquares.forEach(square => {
+		square.reset();
+	});
+
+	// for each sqaure update new random colors
+	setTimeout(function() {
+		const randomColorPairs = shuffleColors();
+		for (var i = 0; i < boardSquares.length; i++) {
+			const newColor = randomColorPairs[i];
+			const square = boardSquares[i];
+			square.setColor(newColor);
+		}
+	}, 500);
+}
+
+// handling restart button
+const restartButton = document.getElementById("restart-button");
+
+restartButton.addEventListener("click", function() {
+	console.log("restart button pressed");
+	resetGame();
+});
+
+// set up the game
+const boardSquares = [];
+
+function gameSetup() {
+	generateBoardSquares();
+	const randomColorPairs = shuffleColors();
+	const squareElements = document.getElementsByClassName("board-square");
+
+	for (var i = 0; i < squareElements.length; i++) {
+		const element = squareElements[i];
+		const color = randomColorPairs[i];
+		const square = new BoardSquare(element, color);
+		boardSquares.push(square);
 	}
 }
 
