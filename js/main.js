@@ -1,3 +1,4 @@
+// BoardSqaure class
 class BoardSquare {
 	constructor(element, color) {
 		this.element = element;
@@ -39,6 +40,51 @@ class BoardSquare {
 	matchFound() {
 		this.isFaceUp = true;
 		this.isMatched = true;
+	}
+}
+
+
+// StopWatch class
+class StopWatch {
+	constructor(element) {
+		this.element = element;
+		this.running = false;
+		this.initialTime = performance.now();
+		this.defaultTimeDisplay = this.element.innerHTML;
+		console.log("time time: "+this.initialTime);
+		console.log("constructing stop watch");
+		console.log("element: "+this.element);
+	}
+
+	start() {
+		if (!this.initialTime) this.initialTime = performance.now();
+		if (this.running) return;
+		else {
+			this.running = true;
+			// update the display of the timer, need to bind the context of the object (this)
+			this.timerInterval = setInterval(this.calculateSinceStart.bind(this), 1000);
+		}
+	}
+
+	stop() {
+		this.running = false;
+		this.initialTime = null;
+		this.element.innerHTML = this.defaultTimeDisplay;
+		clearInterval(this.timerInterval);
+	}
+
+	calculateSinceStart() {
+		const currentTime = performance.now();
+		const timeDelta = currentTime - this.initialTime;
+		console.log("time since start: "+timeDelta);
+		this.element.innerHTML = `<h6 id="display">${this.formatTime(timeDelta)}</h6>`;
+	}
+
+	formatTime(time) {
+		const seconds = Math.floor(time / 1000) % 60;
+		const minutes = Math.floor(time / 60000) % 60;
+		const hours = Math.floor(time / 3600000) % 60;
+		return `Time: ${hours}:${minutes}:${seconds}`;
 	}
 }
 
@@ -145,22 +191,38 @@ function resetGame() {
 	}, 500);
 }
 
-// handling restart button
+// create the stop watch
+const stopWatch = new StopWatch(document.getElementsByClassName("stopWatch")[0]);
+
+// handle restart button
 const restartButton = document.getElementById("restart-button");
 
 restartButton.addEventListener("click", function() {
 	console.log("restart button pressed");
 	resetGame();
+	stopWatch.stop();
+});
+
+// handle start button
+const startButton = document.getElementById("start-button");
+
+startButton.addEventListener("click", function() {
+	console.log("start button pressed");
+	stopWatch.start();
 });
 
 // set up the game
 const boardSquares = [];
 
 function gameSetup() {
+	// insert squares into html
 	generateBoardSquares();
-	const randomColorPairs = shuffleColors();
-	const squareElements = document.getElementsByClassName("board-square");
 
+	// generate random colors for the squares
+	const randomColorPairs = shuffleColors();
+
+	// create and save and set the color of the square objects
+	const squareElements = document.getElementsByClassName("board-square");
 	for (var i = 0; i < squareElements.length; i++) {
 		const element = squareElements[i];
 		const color = randomColorPairs[i];
