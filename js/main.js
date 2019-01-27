@@ -49,9 +49,7 @@ class StopWatch {
 	constructor(element) {
 		this.element = element;
 		this.running = false;
-		this.initialTime = performance.now();
 		this.defaultTimeDisplay = this.element.innerHTML;
-		console.log("time time: "+this.initialTime);
 		console.log("constructing stop watch");
 		console.log("element: "+this.element);
 	}
@@ -62,7 +60,7 @@ class StopWatch {
 		else {
 			this.running = true;
 			// update the display of the timer, need to bind the context of the object (this)
-			this.timerInterval = setInterval(this.calculateSinceStart.bind(this), 1000);
+			this.timerInterval = setInterval(this.calculateTimeSinceStart.bind(this), 1000);
 		}
 	}
 
@@ -73,7 +71,7 @@ class StopWatch {
 		clearInterval(this.timerInterval);
 	}
 
-	calculateSinceStart() {
+	calculateTimeSinceStart() {
 		const currentTime = performance.now();
 		const timeDelta = currentTime - this.initialTime;
 		console.log("time since start: "+timeDelta);
