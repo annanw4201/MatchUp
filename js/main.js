@@ -146,7 +146,7 @@ function shuffleColors() {
 	return shuffleArray(colorPairs);
 }
 
-// flip the square
+// flip the square and check if match all the pairs
 var firstFaceUpSquare = null;
 
 function flipSquare(square) {
@@ -159,6 +159,10 @@ function flipSquare(square) {
 		firstFaceUpSquare.matchFound();
 		square.matchFound();
 		firstFaceUpSquare = null;
+		numberOfSquaresMatched++;
+		if (numberOfSquaresMatched == boardSquares.length) {
+			window.alert(`You made it in ${document.getElementById("display")}`);
+		}
 	}
 	else {
 		const a = firstFaceUpSquare;
@@ -214,6 +218,7 @@ startButton.addEventListener("click", function() {
 
 // set up the game
 const boardSquares = [];
+var numberOfSquaresMatched = 0;
 
 function gameSetup() {
 	// insert squares into html
