@@ -160,8 +160,12 @@ function flipSquare(square) {
 		square.matchFound();
 		firstFaceUpSquare = null;
 		numberOfSquaresMatched++;
-		if (numberOfSquaresMatched == boardSquares.length) {
-			window.alert(`You made it in ${document.getElementById("display")}`);
+		console.log("number matched: " + numberOfSquaresMatched);
+		if (numberOfSquaresMatched == boardSquares.length / 2) {
+			setTimeout(() => {
+				window.alert(`You made it in ${document.getElementById("display").textContent}`);
+				stopWatch.stop();
+			}, 400);
 		}
 	}
 	else {
@@ -180,10 +184,17 @@ function resetGame() {
 	// reset the first face up square if not null
 	firstFaceUpSquare = null;
 
+	// reset the number of matched pairs
+	numberOfSquaresMatched = 0;
+
 	// reset state for each sqaure
 	boardSquares.forEach(square => {
 		square.reset();
 	});
+
+	//reset stop watch
+	stopWatch.stop();
+	stopWatch.start();
 
 	// for each sqaure update new random colors
 	setTimeout(function() {
@@ -199,21 +210,12 @@ function resetGame() {
 // create the stop watch
 const stopWatch = new StopWatch(document.getElementsByClassName("stopWatch")[0]);
 
-// handle restart button
-const restartButton = document.getElementById("restart-button");
-
-restartButton.addEventListener("click", function() {
-	console.log("restart button pressed");
-	resetGame();
-	stopWatch.stop();
-});
-
 // handle start button
 const startButton = document.getElementById("start-button");
 
 startButton.addEventListener("click", function() {
 	console.log("start button pressed");
-	stopWatch.start();
+	resetGame();
 });
 
 // set up the game
